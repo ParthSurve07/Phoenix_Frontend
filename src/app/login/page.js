@@ -45,70 +45,70 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+    <main className="min-h-screen bg-amber-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2 mb-8 text-white font-bold text-xl">
-          <TrendingUp className="text-emerald-400" size={22} />
+        <div className="flex items-center justify-center gap-2 mb-8 text-slate-900 font-semibold text-lg">
+          <TrendingUp className="text-amber-700" size={22} />
           <span>FinTrack</span>
         </div>
 
         {/* Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 flex flex-col gap-5">
+        <div className="bg-white border border-amber-200 rounded-lg p-8 flex flex-col gap-5">
           <div>
-            <h1 className="text-white text-xl font-semibold">Welcome back</h1>
-            <p className="text-slate-400 text-sm mt-1">Login to your account</p>
+            <h1 className="text-slate-900 text-xl font-semibold">Welcome back</h1>
+            <p className="text-slate-600 text-sm mt-1">Login to your account</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <Label className="text-slate-300 text-sm">Email</Label>
+              <Label className="text-slate-700 text-sm font-medium">Email</Label>
               <Input
                 type="email"
                 placeholder="you@example.com"
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                className="bg-amber-50 border-amber-200 text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-200"
                 {...register("email")}
               />
               {errors.email && (
-                <span className="text-red-400 text-xs">{errors.email.message}</span>
+                <span className="text-red-600 text-xs">{errors.email.message}</span>
               )}
             </div>
 
             {/* Password */}
             <div className="flex flex-col gap-1.5">
-              <Label className="text-slate-300 text-sm">Password</Label>
+              <Label className="text-slate-700 text-sm font-medium">Password</Label>
               <Input
                 type="password"
                 placeholder="••••••••"
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                className="bg-amber-50 border-amber-200 text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-200"
                 {...register("password")}
               />
               {errors.password && (
-                <span className="text-red-400 text-xs">{errors.password.message}</span>
+                <span className="text-red-600 text-xs">{errors.password.message}</span>
               )}
             </div>
 
             {/* Server Error */}
             {serverError && (
-              <p className="text-red-400 text-xs">{serverError}</p>
+              <p className="text-red-600 text-xs">{serverError}</p>
             )}
 
             {/* Submit */}
             <Button
               type="submit"
               disabled={loading}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white w-full mt-1"
+              className="bg-slate-900 hover:bg-slate-800 text-white w-full mt-1 rounded-lg"
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
-          <p className="text-slate-400 text-sm text-center">
+          <p className="text-slate-600 text-sm text-center">
             Don't have an account?{" "}
-            <Link href="/register" className="text-emerald-400 hover:underline">
+            <Link href="/register" className="text-slate-900 font-medium hover:underline">
               Register
             </Link>
           </p>

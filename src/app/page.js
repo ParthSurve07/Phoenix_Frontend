@@ -11,99 +11,98 @@ import {
 
 const features = [
   {
-    icon: <TrendingUp className="text-emerald-400" size={28} />,
-    title: "AI-Powered Predictions",
+    icon: <TrendingUp className="text-amber-700" size={24} />,
+    title: "Stock Predictions",
     description:
-      "XGBoost + Prophet models analyze your stocks and give BUY / SELL / NEUTRAL signals.",
+      "Advanced analysis to help you make informed decisions on your portfolio.",
   },
   {
-    icon: <BarChart2 className="text-blue-400" size={28} />,
-    title: "Portfolio Visualization",
+    icon: <BarChart2 className="text-amber-700" size={24} />,
+    title: "Portfolio Tracking",
     description:
-      "See your allocation, P&L, and portfolio value trend in clean interactive charts.",
+      "Monitor your allocation, returns, and portfolio performance in real-time.",
   },
   {
-    icon: <ShieldCheck className="text-yellow-400" size={28} />,
-    title: "Risk Analysis",
+    icon: <ShieldCheck className="text-amber-700" size={24} />,
+    title: "Risk Management",
     description:
-      "Get instant insights on concentration risk, volatility exposure, and diversification.",
+      "Understand your exposure and optimize your portfolio diversification.",
   },
   {
-    icon: <Zap className="text-purple-400" size={28} />,
-    title: "Broker Integration",
+    icon: <Zap className="text-amber-700" size={24} />,
+    title: "Easy Integration",
     description:
-      "Connect Angel One directly or upload your Zerodha CSV to load your real portfolio.",
+      "Connect your broker directly or upload your portfolio data seamlessly.",
   },
 ];
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-amber-50 text-slate-900">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-28 gap-6">
-        <span className="text-sm text-emerald-400 font-medium tracking-widest uppercase">
-          AI-Enhanced Stock Portfolio Management
+      <section className="flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+        <span className="text-xs text-slate-600 font-medium tracking-wide uppercase">
+          Portfolio Management & Analytics
         </span>
 
-        <h1 className="text-5xl font-bold leading-tight max-w-3xl">
-          Your Portfolio,{" "}
-          <span className="text-emerald-400">Smarter.</span>
+        <h1 className="text-4xl sm:text-5xl font-light leading-tight max-w-3xl">
+          Smart investing<br />made simple.
         </h1>
 
-        <p className="text-slate-400 text-lg max-w-xl">
-          FinTrack combines real brokerage data with machine learning to give
-          you predictions, risk insights, and portfolio analytics — all in one
-          place.
+        <p className="text-slate-600 text-base max-w-xl">
+          Track your portfolio, get actionable insights, and make better investment decisions.
         </p>
 
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-3 mt-6">
           <Link href="/register">
-            <Button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-5 text-base">
-              Get Started Free
+            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-sm font-medium rounded-lg">
+              Get Started
             </Button>
           </Link>
           <Link href="/login">
             <Button
               variant="outline"
-              className="border-slate-600 text-slate-300 hover:text-white px-8 py-5 text-base"
+              className="border-slate-300 text-slate-900 hover:bg-white px-8 py-6 text-sm font-medium rounded-lg"
             >
-              Login
+              Sign In
             </Button>
           </Link>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="px-6 pb-24">
-        <h2 className="text-center text-2xl font-semibold text-slate-200 mb-10">
-          Everything you need to invest smarter
-        </h2>
+      <section className="px-6 py-20 bg-white border-t border-amber-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-center text-2xl sm:text-3xl font-light text-slate-900 mb-16">
+            What you get
+          </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="bg-slate-900 border-slate-800 hover:border-emerald-500 transition-all duration-200"
-            >
-              <CardContent className="p-6 flex flex-col gap-3">
-                {feature.icon}
-                <h3 className="text-white font-semibold text-base">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-4"
+              >
+                <div className="text-amber-700">
+                  {feature.icon}
+                </div>
+                <h3 className="text-slate-900 font-medium text-base">
                   {feature.title}
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-600 text-sm leading-relaxed">
                   {feature.description}
                 </p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 text-center py-6 text-slate-500 text-sm">
-        © 2025 FinTrack — Built for WCE Mini Project
+      <footer className="border-t border-amber-200 text-center py-8 text-slate-500 text-xs bg-white">
+        © 2025 FinTrack
       </footer>
     </main>
   );
