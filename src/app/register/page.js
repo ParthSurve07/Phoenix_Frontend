@@ -1,0 +1,157 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import api from "@/lib/api";
+
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Enter a valid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setServerError("");
+    try {
+      await api.post("/auth/register", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      router.push("/login");
+    } catch (err) {
+      setServerError(err.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-2 mb-8 text-white font-bold text-xl">
+          <TrendingUp className="text-emerald-400" size={22} />
+          <span>FinTrack</span>
+        </div>
+
+        {/* Card */}
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 flex flex-col gap-5">
+          <div>
+            <h1 className="text-white text-xl font-semibold">Create account</h1>
+            <p className="text-slate-400 text-sm mt-1">Start tracking your portfolio</p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+
+            {/* Name */}
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-slate-300 text-sm">Full Name</Label>
+              <Input
+                type="text"
+                placeholder="Parth Patil"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                {...register("name")}
+              />
+              {errors.name && (
+                <span className="text-red-400 text-xs">{errors.name.message}</span>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-slate-300 text-sm">Email</Label>
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                {...register("email")}
+              />
+              {errors.email && (
+                <span className="text-red-400 text-xs">{errors.email.message}</span>
+              )}
+            </div>
+
+            {/* Password */}
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-slate-300 text-sm">Password</Label>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                {...register("password")}
+              />
+              {errors.password && (
+                <span className="text-red-400 text-xs">{errors.password.message}</span>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-slate-300 text-sm">Confirm Password</Label>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-emerald-500"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <span className="text-red-400 text-xs">{errors.confirmPassword.message}</span>
+              )}
+            </div>
+
+            {/* Server Error */}
+            {serverError && (
+              <p className="text-red-400 text-xs">{serverError}</p>
+            )}
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="bg-emerald-500 hover:bg-emerald-600 text-white w-full mt-1"
+            >
+              {loading ? "Creating account..." : "Create Account"}
+            </Button>
+          </form>
+
+          <p className="text-slate-400 text-sm text-center">
+            Already have an account?{" "}
+            <Link href="/login" className="text-emerald-400 hover:underline">
+              Login
+            </Link>
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
