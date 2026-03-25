@@ -123,3 +123,36 @@ export const mockPredictions = [
     lastUpdated: "2025-03-24",
   },
 ];
+
+export const mockRisk = {
+  overallRisk: "Moderate",
+  riskScore: 58,
+  summary:
+    "Your portfolio is moderately concentrated in the IT sector. Consider diversifying into other sectors to reduce risk.",
+  insights: [
+    {
+      type: "warning",
+      title: "Sector Concentration",
+      description:
+        "48.3% of your portfolio is in IT sector stocks (TCS, INFY, WIPRO). High sector concentration increases volatility risk.",
+    },
+    {
+      type: "warning",
+      title: "Underperforming Holdings",
+      description:
+        "WIPRO is down 5.95% and INFY is down 1.43%. Combined they represent 28.3% of your portfolio.",
+    },
+    {
+      type: "suggestion",
+      title: "Diversification Opportunity",
+      description:
+        "Adding exposure to FMCG, Pharma, or Infrastructure sectors could reduce overall portfolio volatility.",
+    },
+    {
+      type: "suggestion",
+      title: "Strong Performers",
+      description:
+        "HDFC and ICICIBANK are showing strong momentum. Banking sector allocation looks healthy at 26.4%.",
+    },
+  ],
+};
