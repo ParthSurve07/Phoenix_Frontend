@@ -14,7 +14,7 @@ export default function DashboardPage() {
 
       {/* Page Title */}
       <div>
-        <h1 className="text-slate-900 text-xl font-semibold">Dashboard</h1>
+        <h1 className="text-slate-900 text-xl font-semibold mt-4">Dashboard</h1>
         <p className="text-slate-500 text-sm mt-1">
           Your portfolio overview at a glance
         </p>
