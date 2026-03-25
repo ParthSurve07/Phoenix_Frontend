@@ -1,7 +1,9 @@
 'use client'
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { useState } from "react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
 const inter = Inter({ subsets: ['Latin'] })
 
