@@ -36,6 +36,7 @@ export default function LoginPage() {
     try {
       const res = await api.post("/auth/login", data);
       localStorage.setItem("fintrack_token", res.data.token);
+      localStorage.setItem("fintrack_user", JSON.stringify(res.data.user));
       router.push("/dashboard");
     } catch (err) {
       setServerError(err.response?.data?.message || "Login failed. Try again.");

@@ -9,13 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-// Mock user — will come from API later
-const mockUser = {
-  name: "Parth Patil",
-  email: "parth@example.com",
-  joinedAt: "January 2025",
-};
+import { useProfile, useChangePassword } from "@/hooks/useUser";
 
 const passwordSchema = z
   .object({
@@ -30,9 +24,9 @@ const passwordSchema = z
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { data: user, isLoading } = useProfile();
+  const changePassword = useChangePassword();
   const [passwordSuccess, setPasswordSuccess] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -42,88 +36,77 @@ export default function ProfilePage() {
   } = useForm({ resolver: zodResolver(passwordSchema) });
 
   const onPasswordSubmit = async (data) => {
-    setLoading(true);
-    setPasswordError("");
     setPasswordSuccess("");
     try {
-      // Will call API later: await api.post("/auth/change-password", data)
-      await new Promise((res) => setTimeout(res, 800)); // mock delay
+      await changePassword.mutateAsync({
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
       setPasswordSuccess("Password updated successfully.");
       reset();
-    } catch (err) {
-      setPasswordError("Failed to update password. Try again.");
-    } finally {
-      setLoading(false);
-    }
+    } catch { }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("fintrack_token");
+    localStorage.removeItem("fintrack_user");
     router.push("/login");
   };
 
+  const joinedAt = user?.createdAt
+    ? new Date(user.createdAt).toLocaleDateString("en-IN", { month: "long", year: "numeric" })
+    : "—";
+
   return (
     <div className="flex flex-col gap-6 max-w-2xl">
-
       {/* Header */}
       <div>
         <h1 className="text-slate-900 text-xl font-semibold mt-4">Profile</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Manage your account details
-        </p>
+        <p className="text-slate-500 text-sm mt-1">Manage your account details</p>
       </div>
 
       {/* User Info Card */}
       <div className="bg-white border border-amber-200 rounded-xl p-6 flex flex-col gap-4">
-        <h2 className="text-slate-900 font-semibold text-sm">
-          Account Information
-        </h2>
+        <h2 className="text-slate-900 font-semibold text-sm">Account Information</h2>
 
-        {/* Name */}
-        <div className="flex items-center gap-3 py-3 border-b border-amber-50">
-          <User size={16} className="text-amber-700 shrink-0" />
-          <div>
-            <p className="text-slate-400 text-xs">Full Name</p>
-            <p className="text-slate-900 text-sm font-medium mt-0.5">
-              {mockUser.name}
-            </p>
+        {isLoading ? (
+          <div className="animate-pulse flex flex-col gap-4">
+            <div className="h-4 bg-amber-100 rounded w-48" />
+            <div className="h-4 bg-amber-100 rounded w-64" />
+            <div className="h-4 bg-amber-100 rounded w-40" />
           </div>
-        </div>
-
-        {/* Email */}
-        <div className="flex items-center gap-3 py-3 border-b border-amber-50">
-          <Mail size={16} className="text-amber-700 shrink-0" />
-          <div>
-            <p className="text-slate-400 text-xs">Email</p>
-            <p className="text-slate-900 text-sm font-medium mt-0.5">
-              {mockUser.email}
-            </p>
-          </div>
-        </div>
-
-        {/* Joined */}
-        <div className="flex items-center gap-3 py-3">
-          <Lock size={16} className="text-amber-700 shrink-0" />
-          <div>
-            <p className="text-slate-400 text-xs">Member Since</p>
-            <p className="text-slate-900 text-sm font-medium mt-0.5">
-              {mockUser.joinedAt}
-            </p>
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-3 py-3 border-b border-amber-50">
+              <User size={16} className="text-amber-700 shrink-0" />
+              <div>
+                <p className="text-slate-400 text-xs">Full Name</p>
+                <p className="text-slate-900 text-sm font-medium mt-0.5">{user?.name}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 py-3 border-b border-amber-50">
+              <Mail size={16} className="text-amber-700 shrink-0" />
+              <div>
+                <p className="text-slate-400 text-xs">Email</p>
+                <p className="text-slate-900 text-sm font-medium mt-0.5">{user?.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 py-3">
+              <Lock size={16} className="text-amber-700 shrink-0" />
+              <div>
+                <p className="text-slate-400 text-xs">Member Since</p>
+                <p className="text-slate-900 text-sm font-medium mt-0.5">{joinedAt}</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Change Password Card */}
       <div className="bg-white border border-amber-200 rounded-xl p-6 flex flex-col gap-5">
-        <h2 className="text-slate-900 font-semibold text-sm">
-          Change Password
-        </h2>
+        <h2 className="text-slate-900 font-semibold text-sm">Change Password</h2>
 
-        <form
-          onSubmit={handleSubmit(onPasswordSubmit)}
-          className="flex flex-col gap-4"
-        >
-          {/* Current Password */}
+        <form onSubmit={handleSubmit(onPasswordSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label className="text-slate-600 text-sm">Current Password</Label>
             <Input
@@ -133,13 +116,10 @@ export default function ProfilePage() {
               {...register("currentPassword")}
             />
             {errors.currentPassword && (
-              <span className="text-red-600 text-xs">
-                {errors.currentPassword.message}
-              </span>
+              <span className="text-red-600 text-xs">{errors.currentPassword.message}</span>
             )}
           </div>
 
-          {/* New Password */}
           <div className="flex flex-col gap-1.5">
             <Label className="text-slate-600 text-sm">New Password</Label>
             <Input
@@ -149,17 +129,12 @@ export default function ProfilePage() {
               {...register("newPassword")}
             />
             {errors.newPassword && (
-              <span className="text-red-600 text-xs">
-                {errors.newPassword.message}
-              </span>
+              <span className="text-red-600 text-xs">{errors.newPassword.message}</span>
             )}
           </div>
 
-          {/* Confirm New Password */}
           <div className="flex flex-col gap-1.5">
-            <Label className="text-slate-600 text-sm">
-              Confirm New Password
-            </Label>
+            <Label className="text-slate-600 text-sm">Confirm New Password</Label>
             <Input
               type="password"
               placeholder="••••••••"
@@ -167,26 +142,23 @@ export default function ProfilePage() {
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
-              <span className="text-red-600 text-xs">
-                {errors.confirmPassword.message}
-              </span>
+              <span className="text-red-600 text-xs">{errors.confirmPassword.message}</span>
             )}
           </div>
 
-          {/* Feedback */}
-          {passwordSuccess && (
-            <p className="text-green-600 text-xs">{passwordSuccess}</p>
-          )}
-          {passwordError && (
-            <p className="text-red-600 text-xs">{passwordError}</p>
+          {passwordSuccess && <p className="text-green-600 text-xs">{passwordSuccess}</p>}
+          {changePassword.isError && (
+            <p className="text-red-600 text-xs">
+              {changePassword.error?.response?.data?.message || "Failed to update password."}
+            </p>
           )}
 
           <Button
             type="submit"
-            disabled={loading}
+            disabled={changePassword.isPending}
             className="bg-slate-900 hover:bg-slate-800 text-white w-fit px-6"
           >
-            {loading ? "Updating..." : "Update Password"}
+            {changePassword.isPending ? "Updating..." : "Update Password"}
           </Button>
         </form>
       </div>
@@ -195,9 +167,7 @@ export default function ProfilePage() {
       <div className="bg-white border border-amber-200 rounded-xl p-6 flex items-center justify-between">
         <div>
           <p className="text-slate-900 text-sm font-semibold">Logout</p>
-          <p className="text-slate-500 text-xs mt-0.5">
-            You will be returned to the login page
-          </p>
+          <p className="text-slate-500 text-xs mt-0.5">You will be returned to the login page</p>
         </div>
         <Button
           onClick={handleLogout}
@@ -208,7 +178,6 @@ export default function ProfilePage() {
           Logout
         </Button>
       </div>
-
     </div>
   );
 }

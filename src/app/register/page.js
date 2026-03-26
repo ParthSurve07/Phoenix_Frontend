@@ -41,12 +41,14 @@ export default function RegisterPage() {
     setLoading(true);
     setServerError("");
     try {
-      await api.post("/auth/register", {
+      const res = await api.post("/auth/register", {
         name: data.name,
         email: data.email,
         password: data.password,
       });
-      router.push("/login");
+      localStorage.setItem("fintrack_token", res.data.token);
+      localStorage.setItem("fintrack_user", JSON.stringify(res.data.user));
+      router.push("/dashboard");
     } catch (err) {
       setServerError(err.response?.data?.message || "Registration failed. Try again.");
     } finally {

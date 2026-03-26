@@ -1,35 +1,56 @@
 import { TrendingUp, TrendingDown, Wallet, BarChart2 } from "lucide-react";
 
-const cards = [
-  {
-    label: "Total Invested",
-    value: "₹1,20,000",
-    icon: Wallet,
-    sub: "Across 6 stocks",
-  },
-  {
-    label: "Current Value",
-    value: "₹1,34,500",
-    icon: BarChart2,
-    sub: "+₹14,500 overall",
-  },
-  {
-    label: "Total P&L",
-    value: "+₹14,500",
-    icon: TrendingUp,
-    positive: true,
-    sub: "+12.08% returns",
-  },
-  {
-    label: "Today's Change",
-    value: "-₹320",
-    icon: TrendingDown,
-    positive: false,
-    sub: "-0.23% today",
-  },
-];
+export default function SummaryCards({ portfolio, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white border border-amber-200 rounded-xl p-5 h-28 animate-pulse"
+          />
+        ))}
+      </div>
+    );
+  }
 
-export default function SummaryCards() {
+  const holdings = portfolio || [];
+  const totalInvested = holdings.reduce(
+    (sum, h) => sum + h.avgPrice * h.quantity,
+    0,
+  );
+  const currentValue = holdings.reduce((sum, h) => sum + h.marketValue, 0);
+  const totalPnl = holdings.reduce((sum, h) => sum + h.pnl, 0);
+  const pnlPercent = totalInvested > 0 ? (totalPnl / totalInvested) * 100 : 0;
+
+  const cards = [
+    {
+      label: "Total Invested",
+      value: `₹${totalInvested.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,
+      icon: Wallet,
+      sub: `Across ${holdings.length} stocks`,
+    },
+    {
+      label: "Current Value",
+      value: `₹${currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,
+      icon: BarChart2,
+      sub: `${totalPnl >= 0 ? "+" : ""}₹${totalPnl.toLocaleString("en-IN", { maximumFractionDigits: 0 })} overall`,
+    },
+    {
+      label: "Total P&L",
+      value: `${totalPnl >= 0 ? "+" : ""}₹${totalPnl.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`,
+      icon: totalPnl >= 0 ? TrendingUp : TrendingDown,
+      positive: totalPnl >= 0,
+      sub: `${pnlPercent >= 0 ? "+" : ""}${pnlPercent.toFixed(2)}% returns`,
+    },
+    {
+      label: "Holdings",
+      value: holdings.length.toString(),
+      icon: BarChart2,
+      sub: holdings.length > 0 ? `Last updated recently` : "No holdings yet",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card, i) => {

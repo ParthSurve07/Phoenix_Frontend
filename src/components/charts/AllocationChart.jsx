@@ -1,5 +1,4 @@
 "use client";
-
 import {
   PieChart,
   Pie,
@@ -9,16 +8,6 @@ import {
   Legend,
 } from "recharts";
 
-const data = [
-  { name: "TCS", value: 30 },
-  { name: "INFY", value: 20 },
-  { name: "HDFC", value: 18 },
-  { name: "RELIANCE", value: 15 },
-  { name: "WIPRO", value: 10 },
-  { name: "Others", value: 7 },
-];
-
-// Warm neutral palette — fits amber theme
 const COLORS = [
   "#92400e",
   "#b45309",
@@ -28,7 +17,29 @@ const COLORS = [
   "#cbd5e1",
 ];
 
-export default function AllocationChart() {
+export default function AllocationChart({ portfolio, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="bg-white border border-amber-200 rounded-xl p-5 h-80 animate-pulse" />
+    );
+  }
+
+  const holdings = portfolio || [];
+  const totalValue = holdings.reduce((sum, h) => sum + h.marketValue, 0);
+
+  const data = holdings.map((h) => ({
+    name: h.symbol.replace("-EQ", ""),
+    value: parseFloat(((h.marketValue / totalValue) * 100).toFixed(2)),
+  }));
+
+  if (data.length === 0) {
+    return (
+      <div className="bg-white border border-amber-200 rounded-xl p-5 flex items-center justify-center text-slate-400 text-sm h-80">
+        No holdings to display
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white border border-amber-200 rounded-xl p-5">
       <h2 className="text-slate-900 font-semibold text-sm mb-4">
