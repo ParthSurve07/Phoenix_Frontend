@@ -3,11 +3,12 @@ import { TrendingUp, TrendingDown, Wallet, BarChart2 } from "lucide-react";
 export default function SummaryCards({ portfolio, isLoading }) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      /* Fixed: Changed to a 2x2 grid on mobile (grid-cols-2) instead of a 1-column stack */
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="bg-white border border-amber-200 rounded-xl p-5 h-28 animate-pulse"
+            className="bg-white border border-amber-200 rounded-xl p-4 sm:p-5 h-24 sm:h-28 animate-pulse shadow-sm"
           />
         ))}
       </div>
@@ -52,20 +53,25 @@ export default function SummaryCards({ portfolio, isLoading }) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {cards.map((card, i) => {
         const Icon = card.icon;
         return (
           <div
             key={i}
-            className="bg-white border border-amber-200 rounded-xl p-5 flex flex-col gap-3"
+            // Tightened padding and gap on mobile so it fits the 2-col layout beautifully
+            className="bg-white border border-amber-200 rounded-xl p-3.5 sm:p-5 flex flex-col gap-1.5 sm:gap-3 shadow-sm"
           >
-            <div className="flex items-center justify-between">
-              <span className="text-slate-500 text-sm">{card.label}</span>
-              <Icon size={18} className="text-amber-700" />
+            <div className="flex items-start sm:items-center justify-between gap-1">
+              <span className="text-slate-500 text-xs sm:text-sm font-medium leading-tight">
+                {card.label}
+              </span>
+              <Icon className="text-amber-700 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
             </div>
+
             <p
-              className={`text-2xl font-semibold ${
+              // Scaled down the main value text slightly on mobile so large numbers like ₹100,000 don't break the box
+              className={`text-lg sm:text-2xl font-semibold truncate ${
                 card.positive === true
                   ? "text-green-600"
                   : card.positive === false
@@ -75,7 +81,10 @@ export default function SummaryCards({ portfolio, isLoading }) {
             >
               {card.value}
             </p>
-            <p className="text-slate-500 text-xs">{card.sub}</p>
+
+            <p className="text-slate-500 text-[10px] sm:text-xs truncate">
+              {card.sub}
+            </p>
           </div>
         );
       })}

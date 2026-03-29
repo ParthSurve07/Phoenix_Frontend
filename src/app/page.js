@@ -42,29 +42,30 @@ export default function LandingPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
-        <span className="text-xs text-slate-600 font-medium tracking-wide uppercase">
+      <section className="flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 py-16 md:py-28 lg:py-36 gap-6 md:gap-8">
+        <span className="text-xs sm:text-sm md:text-base text-slate-600 font-medium tracking-wide uppercase">
           Portfolio Management & Analytics
         </span>
 
-        <h1 className="text-4xl sm:text-5xl font-light leading-tight max-w-3xl">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-tight max-w-4xl">
           Smart investing<br />made simple.
         </h1>
 
-        <p className="text-slate-600 text-base max-w-xl">
+        <p className="text-slate-600 text-base sm:text-lg md:text-xl max-w-2xl px-2">
           Track your portfolio, get actionable insights, and make better investment decisions.
         </p>
 
-        <div className="flex gap-3 mt-6">
-          <Link href="/register">
-            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-sm font-medium rounded-lg">
+        {/* Buttons stack vertically on mobile, horizontally on screens sm and up */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto px-4 sm:px-0">
+          <Link href="/register" className="w-full sm:w-auto">
+            <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-base font-medium rounded-lg">
               Get Started
             </Button>
           </Link>
-          <Link href="/login">
+          <Link href="/login" className="w-full sm:w-auto">
             <Button
               variant="outline"
-              className="border-slate-300 text-slate-900 hover:bg-white px-8 py-6 text-sm font-medium rounded-lg"
+              className="w-full border-slate-300 text-slate-900 hover:bg-white px-8 py-6 text-base font-medium rounded-lg"
             >
               Sign In
             </Button>
@@ -73,25 +74,25 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="px-6 py-20 bg-white border-t border-amber-200">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-center text-2xl sm:text-3xl font-light text-slate-900 mb-16">
+      <section className="px-4 sm:px-8 md:px-12 py-16 md:py-24 lg:py-32 bg-white border-t border-amber-200">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-light text-slate-900 mb-12 md:mb-20">
             What you get
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 lg:gap-12">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="flex flex-col gap-4"
+                className="flex flex-col items-center text-center sm:items-start sm:text-left gap-4"
               >
-                <div className="text-amber-700">
+                <div className="text-amber-700 bg-amber-50 p-3 rounded-2xl">
                   {feature.icon}
                 </div>
-                <h3 className="text-slate-900 font-medium text-base">
+                <h3 className="text-slate-900 font-medium text-lg md:text-xl">
                   {feature.title}
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed">
+                <p className="text-slate-600 text-base leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -101,7 +102,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-amber-200 text-center py-8 text-slate-500 text-xs bg-white">
+      <footer className="border-t border-amber-200 text-center py-8 md:py-12 text-slate-500 text-sm bg-white">
         © 2025 FinTrack
       </footer>
     </main>

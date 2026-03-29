@@ -20,22 +20,22 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed top-[65px] left-0 h-[calc(100vh-65px)] w-56 bg-white border-r border-amber-200 flex flex-col py-6 px-3 gap-1">
+    <aside className="fixed bottom-0 left-0 right-0 z-[9999] w-full h-16 bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)] border-t border-amber-200 flex flex-row items-center justify-around px-2 py-1 md:fixed md:top-[65px] md:bottom-auto md:w-56 md:h-[calc(100vh-65px)] md:border-r md:border-t-0 md:flex-col md:justify-start md:items-stretch md:py-6 md:px-3 md:gap-1 transition-all duration-300 md:shadow-none">
       {navItems.map(({ label, href, icon: Icon }) => {
         const isActive = pathname === href;
         return (
           <Link
             key={href}
             href={href}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+            className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-3 md:py-2.5 rounded-lg text-[10px] md:text-sm font-medium transition-colors w-full
               ${
                 isActive
-                  ? "bg-amber-50 text-amber-700 border border-amber-200"
-                  : "text-slate-600 hover:bg-amber-50 hover:text-amber-700"
+                  ? "text-amber-700 md:bg-amber-50 md:border md:border-amber-200"
+                  : "text-slate-500 hover:text-amber-700 md:text-slate-600 md:hover:bg-amber-50"
               }`}
           >
-            <Icon size={18} />
-            {label}
+            <Icon size={20} className="md:w-[18px] md:h-[18px]" />
+            <span className={`${isActive ? "font-semibold md:font-medium" : ""}`}>{label}</span>
           </Link>
         );
       })}
